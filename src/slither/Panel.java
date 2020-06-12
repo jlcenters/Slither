@@ -2,6 +2,8 @@ package slither;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class Panel extends JPanel implements ActionListener {
@@ -43,6 +45,31 @@ public class Panel extends JPanel implements ActionListener {
 		locateApple();
 		timer = new Timer(DELAY, this);
 		timer.start();
+		sing("school.wav");
+	}
+
+	public static void sing(String songLocation) {
+		try {
+			File musicPath = new File(songLocation);
+
+			if (musicPath.exists()) {
+				AudioInputStream audio = AudioSystem.getAudioInputStream(musicPath);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audio);
+				JOptionPane.showMessageDialog(null, "Use the arrow keys to move.", "Exit to play Slither",
+						JOptionPane.PLAIN_MESSAGE);
+				clip.start();
+
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+				JOptionPane.showMessageDialog(null, "Eat the dots, but don't eat yourself!", "TIP",
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				System.out.println("File cannot be found.");
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
